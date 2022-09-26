@@ -10,5 +10,5 @@ fn main(){
     let mmap = unsafe { Mmap::map(&file).unwrap()  };
     assert_eq!(&contents[..], &mmap[..]);
 
-    println!("{:?}", mmap.to_str());
+    println!("{:?}", mmap);
 }
