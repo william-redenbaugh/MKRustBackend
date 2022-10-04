@@ -1,20 +1,11 @@
-use std::net::UdpSocket;
-use serde_json::{Value};
+pub mod electron_js_socket;
+pub mod event_management;
+use std::thread;
+
+fn launch_threads(){
+    thread::spawn(||electron_js_socket::server_socket_thread);
+}
 
 fn main() {
-    let socket = UdpSocket::bind("127.0.0.1:41234").unwrap();
-    loop{
-        // Receives a single datagram message on the socket. If `buf` is too small to hold
-        // the message, it will be cut off.
-        let mut buf = [0; 6092];
-        let (amt, src) = socket.recv_from(&mut buf).unwrap();
-
-        // Redeclare `buf` as slice of the received data and send reverse data back to origin.
-        let buff_str = String::from_utf8(buf[..amt].to_vec()).unwrap();
-        // Parse the string of data into serde_json::Value.
-
-        let v: Value = serde_json::from_str(&buff_str).unwrap();
-        
-        println!("{}", v["important"]);
-    }   
+    launch_threads();
 }
